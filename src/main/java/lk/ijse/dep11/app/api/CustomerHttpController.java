@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lk.ijse.dep11.app.to.CustomerTO;
 import org.springframework.core.env.Environment;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PreDestroy;
@@ -16,17 +17,17 @@ import java.util.LinkedList;
 @RestController
 @RequestMapping("/customers")
 @CrossOrigin
-
+@Validated
 public class CustomerHttpController {
     HikariDataSource pool;
     public CustomerHttpController(Environment env) {
 
-        HikariConfig config=new HikariConfig();
+        HikariConfig config = new HikariConfig();
         config.setJdbcUrl(env.getRequiredProperty("spring.datasource.url"));
         config.setUsername(env.getRequiredProperty("spring.datasource.user"));
         config.setPassword(env.getRequiredProperty("spring.datasource.password"));
         config.setDriverClassName(env.getRequiredProperty("spring.datasource.driver-class-name"));
-        config.setMaximumPoolSize(env.getRequiredProperty("spring.datasource.hikari-maximum-size",Integer.class));
+        config.setMaximumPoolSize(env.getRequiredProperty("spring.datasource.hikari-maximum-pool-size", Integer.class));
 
         pool = new HikariDataSource(config);
     }
@@ -54,22 +55,22 @@ public class CustomerHttpController {
                 customerList.add(new CustomerTO(id,firstName,lastName,contact,country));
             }
             return customerList;
-            
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
     }
-    @GetMapping
-    public void getAllSortedCustomers(){
-
-    }
-    @GetMapping
-    public void getAllPaginatedCustomers(){
-
-    }
-    @GetMapping
-    public void getAllPaginatedAndSortedCustomers(){
-
-    }
+//    @GetMapping
+//    public void getAllSortedCustomers(){
+//
+//    }
+//    @GetMapping
+//    public void getAllPaginatedCustomers(){
+//
+//    }
+//    @GetMapping
+//    public void getAllPaginatedAndSortedCustomers(){
+//
+//    }
 }
